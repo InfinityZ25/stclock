@@ -1,1 +1,27 @@
 # Add the image for this app & mongodb as services.
+version: "3"
+
+services:
+  mongo:
+    image: mongo:4.0.10
+    container_name: mongo-stclock
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+    restart: unless-stopped
+  app:
+    build: .
+    container_name: stclock-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    command: sh -c "/wait"
+    environment:
+      - spring.data.mongodb.uri=mongodb://mongo:27017/stclock
+      - WAIT_HOSTS=mongo:27017
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=30
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+    restart: unless-stopped
