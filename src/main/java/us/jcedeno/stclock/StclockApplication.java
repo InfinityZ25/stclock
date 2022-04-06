@@ -8,7 +8,6 @@ public class StclockApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(StclockApplication.class, args);
-		System.out.println("test");
 	}
 
 }

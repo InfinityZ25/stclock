@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import us.jcedeno.stclock.exceptions.types.EmployeeNotFoundException;
+
 /**
  * A global exception handler class.
  * 

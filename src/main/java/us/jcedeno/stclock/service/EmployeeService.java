@@ -2,7 +2,7 @@ package us.jcedeno.stclock.service;
 
 import org.springframework.stereotype.Service;
 
-import us.jcedeno.stclock.exceptions.EmployeeNotFoundException;
+import us.jcedeno.stclock.exceptions.types.EmployeeNotFoundException;
 import us.jcedeno.stclock.model.Employee;
 import us.jcedeno.stclock.model.EmployeeCreationRequest;
 import us.jcedeno.stclock.repository.EmployeeRepository;

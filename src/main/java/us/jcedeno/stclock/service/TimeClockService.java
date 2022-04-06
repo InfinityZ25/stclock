@@ -6,8 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import us.jcedeno.stclock.exceptions.EmployeeClockedInException;
-import us.jcedeno.stclock.exceptions.EmployeeNotClockedInException;
+import us.jcedeno.stclock.exceptions.types.EmployeeClockedInException;
+import us.jcedeno.stclock.exceptions.types.EmployeeNotClockedInException;
+import us.jcedeno.stclock.exceptions.types.EmployeeNotFoundException;
 import us.jcedeno.stclock.model.Shift;
 import us.jcedeno.stclock.repository.ShiftRepository;
 
@@ -34,7 +35,7 @@ public class TimeClockService {
      * @param employeeId The id of the employee to query for.
      * @return An optional containing the active shift for the given employee.
      * 
-     * @throws IllegalArgumentException If the employee is not found.
+     * @throws EmployeeNotFoundException If the employee is not found.
      */
     public Optional<Shift> findActiveShift(String employeeId) {
         var employee = employeeService.getEmployeeById(employeeId);
@@ -69,6 +70,7 @@ public class TimeClockService {
      * @param employeeId The id of the employee to clock out.
      * @return The shift that was clocked out.
      * @throws EmployeeNotClockedInException If the employee is not clocked in.
+     * @throws EmployeeNotFoundException     If the employee is not found.
      */
     public Shift clockOut(String employeeId) {
         var shiftQuery = findActiveShift(employeeId);

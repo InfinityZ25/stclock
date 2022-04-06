@@ -1,4 +1,4 @@
-package us.jcedeno.stclock.exceptions;
+package us.jcedeno.stclock.exceptions.types;
 
 public class EmployeeNotFoundException extends RuntimeException {
 
