@@ -55,6 +55,13 @@ public class TimeClockService {
     }
 
     /**
+     * A function that returns all shifts in the system.
+     */
+    public Iterable<Shift> getAllShifts() {
+        return shiftRepository.findAll();
+    }
+
+    /**
      * A query function that queries the repository for an active (endTime == null)
      * shift for the given employee.
      * 
@@ -89,7 +96,7 @@ public class TimeClockService {
         var shiftQuery = findActiveShift(employeeId);
         // If already clocked out, or with no active shifts, throw an exception.
         if (shiftQuery.isEmpty()) {
-            throw new IllegalStateException("Employee is already clocked out.");
+            throw new IllegalStateException("Employee is not clocked in.");
         }
         var shift = shiftQuery.get();
         shift.setEndTime(Instant.now());

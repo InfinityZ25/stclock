@@ -1,9 +1,10 @@
 package us.jcedeno.stclock.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import us.jcedeno.stclock.model.Shift;
@@ -18,13 +19,18 @@ public class ShiftController {
         this.timeClockService = timeClockService;
     }
 
-    @PostMapping("/clockIn")
-    public ResponseEntity<Shift> clockIn(@RequestParam String id) {
+    @GetMapping("/all")
+    public ResponseEntity<Iterable<Shift>> getAllShifts() {
+        return ResponseEntity.ok(timeClockService.getAllShifts());
+    }
+
+    @PostMapping("/clockIn/{id}")
+    public ResponseEntity<Shift> clockIn(@PathVariable String id) {
         return ResponseEntity.ok(timeClockService.clockIn(id));
     }
 
-    @PostMapping("/clockOut")
-    public ResponseEntity<Shift> clockOut(@RequestParam String id) {
+    @PostMapping("/clockOut/{id}")
+    public ResponseEntity<Shift> clockOut(@PathVariable String id) {
         return ResponseEntity.ok(timeClockService.clockOut(id));
     }
 
