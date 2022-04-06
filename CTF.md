@@ -4,7 +4,7 @@ A simple time clock application that allows you to clock in, out, & go on break 
 
 ## Objectives
 
-- [ ] UUID per employee, do not allow interaction with application withouy a valid UUID.
+- [ ] UUID per employee, do not allow interaction with application without a valid UUID.
 - [ ] Allow users to clock in and out. (no multiple shifts at once, start or end).
 - [ ] All shift data performed by users should be recorded & made available upon returning to the application. (preserve state).
 - [ ] Allow users to go on break (unpaid) (no multiple breaks at once, start or end). Also allow to go on lunch which is a paid break of shorter, prespecified duration.
