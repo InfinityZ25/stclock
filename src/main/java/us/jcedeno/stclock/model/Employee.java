@@ -3,16 +3,15 @@ package us.jcedeno.stclock.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * An object representation of an employee.
  * 
  * @author jcedeno
  */
-@Getter
-@Setter
+
+@Data
 @Document
 public class Employee {
     private @Id String id;

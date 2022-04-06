@@ -2,6 +2,7 @@ package us.jcedeno.stclock.service;
 
 import org.springframework.stereotype.Service;
 
+import us.jcedeno.stclock.exceptions.EmployeeNotFoundException;
 import us.jcedeno.stclock.model.Employee;
 import us.jcedeno.stclock.model.EmployeeCreationRequest;
 import us.jcedeno.stclock.repository.EmployeeRepository;
@@ -27,7 +28,21 @@ public class EmployeeService {
      * @throws IllegalArgumentException If the employee is not found.
      */
     public Employee getEmployeeById(String id) {
-        return employeeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Employee not found"));
+        return employeeRepository.findById(id).orElseThrow(() -> new EmployeeNotFoundException("Employee not found"));
+    }
+
+    /**
+     * A function that creates an employee.
+     * 
+     * @param request An object containing the employee's data.
+     * @return The created employee.
+     */
+    public Employee createEmployee(EmployeeCreationRequest request) {
+        Employee employee = new Employee();
+        employee.setFirstName(request.getFirstName());
+        employee.setLastName(request.getLastName());
+
+        return employeeRepository.save(employee);
     }
 
     /**
@@ -38,13 +53,4 @@ public class EmployeeService {
     public Iterable<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
-
-    public Employee createEmployee(EmployeeCreationRequest request) {
-        Employee employee = new Employee();
-        employee.setFirstName(request.getFirstName());
-        employee.setLastName(request.getLastName());
-
-        return employeeRepository.save(employee);
-    }
-
 }
