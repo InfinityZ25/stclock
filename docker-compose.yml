@@ -5,8 +5,6 @@ services:
   mongo:
     image: mongo:4.0.10
     container_name: mongo-db
-    ports:
-      - "27017:27017"
     volumes:
       - ./data:/data/db
     restart: unless-stopped
