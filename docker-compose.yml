@@ -4,14 +4,14 @@ version: "3"
 services:
   mongo:
     image: mongo:4.0.10
-    container_name: mongo-stclock
+    container_name: mongo-db
     ports:
       - "27017:27017"
     volumes:
       - ./data:/data/db
     restart: unless-stopped
   app:
-    build: .
+    image: jcedeno/stclock:latest
     container_name: stclock-app
     ports:
       - "8080:8080"

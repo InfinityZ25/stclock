@@ -10,7 +10,7 @@ import us.jcedeno.stclock.model.Shift;
 
 public interface ShiftRepository extends MongoRepository<Shift, String> {
 
-    Optional<Shift> findByEmployeeId(String employeeId);
+    Optional<Iterable<Shift>> findByEmployeeId(String employeeId);
 
     /**
      * Function that checks if an employee is clocked in by checking if their clock

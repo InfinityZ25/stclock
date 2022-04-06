@@ -1,2 +1,2 @@
 #!/bin/sh
-docker build . -t jcedeno/stclock:latest
+./gradlew build && docker build . -t jcedeno/stclock:latest

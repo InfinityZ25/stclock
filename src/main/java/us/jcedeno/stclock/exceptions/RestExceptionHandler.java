@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import us.jcedeno.stclock.exceptions.types.EmployeeNotClockedInException;
 import us.jcedeno.stclock.exceptions.types.EmployeeNotFoundException;
 
 /**
@@ -18,15 +19,15 @@ import us.jcedeno.stclock.exceptions.types.EmployeeNotFoundException;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = { IllegalArgumentException.class, IllegalStateException.class })
+    @ExceptionHandler(value = { IllegalArgumentException.class })
     protected ResponseEntity<Object> handleConflict(
             RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, ErrorResponse.builder().code(409).message(ex.getMessage()).build(),
                 new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
-    @ExceptionHandler(value = { EmployeeNotFoundException.class })
-    protected ResponseEntity<Object> handleNotFound(EmployeeNotFoundException ex, WebRequest request) {
+    @ExceptionHandler(value = { EmployeeNotFoundException.class, EmployeeNotClockedInException.class })
+    protected ResponseEntity<Object> handleNotFound(RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, ErrorResponse.builder().code(404).message(ex.getMessage()).build(),
                 new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }

@@ -24,6 +24,11 @@ public class ShiftController {
         return ResponseEntity.ok(timeClockService.getAllShifts());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Iterable<Shift>> getEmployeesShifts(@PathVariable String id) {
+        return ResponseEntity.ok(timeClockService.getEmployeeShifts(id));
+    }
+
     @PostMapping("/in/{id}")
     public ResponseEntity<Shift> clockIn(@PathVariable String id) {
         return ResponseEntity.ok(timeClockService.clockIn(id));

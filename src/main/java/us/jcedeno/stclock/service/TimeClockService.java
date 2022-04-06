@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import us.jcedeno.stclock.exceptions.types.EmployeeClockedInException;
 import us.jcedeno.stclock.exceptions.types.EmployeeNotClockedInException;
 import us.jcedeno.stclock.exceptions.types.EmployeeNotFoundException;
+import us.jcedeno.stclock.exceptions.types.ShiftsNotFoundException;
 import us.jcedeno.stclock.model.Shift;
 import us.jcedeno.stclock.repository.ShiftRepository;
 
@@ -82,6 +83,11 @@ public class TimeClockService {
         shift.setEndTime(Instant.now());
         // Save the shift to repo.
         return shiftRepository.save(shift);
+    }
+
+    public Iterable<Shift> getEmployeeShifts(String id) {
+        return shiftRepository.findByEmployeeId(id)
+                .orElseThrow(() -> new ShiftsNotFoundException("No shifts found for employee with id: " + id));
     }
 
     /**
