@@ -19,17 +19,17 @@ public class ShiftController {
         this.timeClockService = timeClockService;
     }
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public ResponseEntity<Iterable<Shift>> getAllShifts() {
         return ResponseEntity.ok(timeClockService.getAllShifts());
     }
 
-    @PostMapping("/clockIn/{id}")
+    @PostMapping("/in/{id}")
     public ResponseEntity<Shift> clockIn(@PathVariable String id) {
         return ResponseEntity.ok(timeClockService.clockIn(id));
     }
 
-    @PostMapping("/clockOut/{id}")
+    @PostMapping("/out/{id}")
     public ResponseEntity<Shift> clockOut(@PathVariable String id) {
         return ResponseEntity.ok(timeClockService.clockOut(id));
     }

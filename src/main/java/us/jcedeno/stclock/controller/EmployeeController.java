@@ -10,31 +10,37 @@ import org.springframework.web.bind.annotation.RestController;
 
 import us.jcedeno.stclock.model.Employee;
 import us.jcedeno.stclock.model.EmployeeCreationRequest;
-import us.jcedeno.stclock.service.TimeClockService;
+import us.jcedeno.stclock.service.EmployeeService;
 
 @RestController
 @RequestMapping(value = "/api/employee")
 public class EmployeeController {
-    private final TimeClockService timeClockService;
+    private final EmployeeService employeeService;
 
-    public EmployeeController(TimeClockService timeClockService) {
-        this.timeClockService = timeClockService;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployee(@PathVariable String id) {
-        return ResponseEntity.ok(timeClockService.getEmployeeById(id));
+        return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public ResponseEntity<Iterable<Employee>> getAllEmployees() {
-        return ResponseEntity.ok(timeClockService.getAllEmployees());
+        return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
-    // Create employee post endpoint
+    /**
+     * Endpoint to create an employee.
+     * 
+     * @param employeeCreationRequest An object containing the employee's first and
+     *                                last name.
+     * @return A new employee
+     */
     @PostMapping("/")
     public ResponseEntity<Employee> createEmployee(@RequestBody EmployeeCreationRequest employeeCreationRequest) {
-        return ResponseEntity.ok(timeClockService.createEmployee(employeeCreationRequest));
+        return ResponseEntity.ok(employeeService.createEmployee(employeeCreationRequest));
     }
 
 }

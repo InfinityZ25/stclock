@@ -3,12 +3,12 @@ package us.jcedeno.stclock.service;
 import java.time.Instant;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import us.jcedeno.stclock.model.Employee;
-import us.jcedeno.stclock.model.EmployeeCreationRequest;
+import us.jcedeno.stclock.exceptions.EmployeeClockedInException;
+import us.jcedeno.stclock.exceptions.EmployeeNotClockedInException;
 import us.jcedeno.stclock.model.Shift;
-import us.jcedeno.stclock.repository.EmployeeRepository;
 import us.jcedeno.stclock.repository.ShiftRepository;
 
 /**
@@ -18,47 +18,13 @@ import us.jcedeno.stclock.repository.ShiftRepository;
  */
 @Service
 public class TimeClockService {
-    private final EmployeeRepository employeeRepository;
     private final ShiftRepository shiftRepository;
 
-    public TimeClockService(EmployeeRepository employeeRepository, ShiftRepository shiftRepository) {
-        this.employeeRepository = employeeRepository;
+    @Autowired
+    private EmployeeService employeeService;
+
+    public TimeClockService(ShiftRepository shiftRepository) {
         this.shiftRepository = shiftRepository;
-    }
-
-    /**
-     * A function that finds an employee by their id.
-     * 
-     * @param id The id of the employee to find.
-     * @return An optional employee.
-     * @throws IllegalArgumentException If the employee is not found.
-     */
-    public Employee getEmployeeById(String id) {
-        return employeeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Employee not found"));
-    }
-
-    /**
-     * A function that finds all employees.
-     * 
-     * @return An iterable of all employees.
-     */
-    public Iterable<Employee> getAllEmployees() {
-        return employeeRepository.findAll();
-    }
-
-    public Employee createEmployee(EmployeeCreationRequest request) {
-        Employee employee = new Employee();
-        employee.setFirstName(request.getFirstName());
-        employee.setLastName(request.getLastName());
-
-        return employeeRepository.save(employee);
-    }
-
-    /**
-     * A function that returns all shifts in the system.
-     */
-    public Iterable<Shift> getAllShifts() {
-        return shiftRepository.findAll();
     }
 
     /**
@@ -71,17 +37,23 @@ public class TimeClockService {
      * @throws IllegalArgumentException If the employee is not found.
      */
     public Optional<Shift> findActiveShift(String employeeId) {
-        var employee = getEmployeeById(employeeId);
+        var employee = employeeService.getEmployeeById(employeeId);
         // Query all current shifts for the employee
         return shiftRepository.findEmployeesActiveShift(employee);
     }
 
-    // Clock in an employee.
+    /**
+     * A function that clocks in an employee.
+     * 
+     * @param employeeId The id of the employee to clock in.
+     * @return The shift that was created.
+     * @throws EmployeeClockedInException If the employee is already clocked in.
+     */
     public Shift clockIn(String employeeId) {
-        var employee = getEmployeeById(employeeId);
+        var employee = employeeService.getEmployeeById(employeeId);
         // If already clocked in, throw an exception.
         if (findActiveShift(employeeId).isPresent()) {
-            throw new IllegalStateException("Employee is already clocked in.");
+            throw new EmployeeClockedInException("Employee is already clocked in.");
         }
         // Create a new shift for the employee.
         var shift = new Shift();
@@ -91,16 +63,32 @@ public class TimeClockService {
         return shiftRepository.save(shift);
     }
 
-    // Clock out
+    /**
+     * A function that clocks out an employee.
+     * 
+     * @param employeeId The id of the employee to clock out.
+     * @return The shift that was clocked out.
+     * @throws EmployeeNotClockedInException If the employee is not clocked in.
+     */
     public Shift clockOut(String employeeId) {
         var shiftQuery = findActiveShift(employeeId);
         // If already clocked out, or with no active shifts, throw an exception.
         if (shiftQuery.isEmpty()) {
-            throw new IllegalStateException("Employee is not clocked in.");
+            throw new EmployeeNotClockedInException("Employee is not clocked in.");
         }
         var shift = shiftQuery.get();
         shift.setEndTime(Instant.now());
         // Save the shift to repo.
         return shiftRepository.save(shift);
     }
+
+    /**
+     * A function that returns all shifts in the system.
+     * 
+     * @return An iterable of all shifts.
+     */
+    public Iterable<Shift> getAllShifts() {
+        return shiftRepository.findAll();
+    }
+
 }
