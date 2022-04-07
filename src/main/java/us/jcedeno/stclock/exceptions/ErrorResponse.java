@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * Utility class to build an error response.
+ * Utility data class to build an error response.
  * 
  * @author jcedeno
  */

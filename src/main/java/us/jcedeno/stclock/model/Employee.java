@@ -10,7 +10,6 @@ import lombok.Data;
  * 
  * @author jcedeno
  */
-
 @Data
 @Document
 public class Employee {
