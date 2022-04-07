@@ -1,6 +1,7 @@
 package us.jcedeno.stclock.model;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -20,6 +21,8 @@ public class Shift {
     private String id;
     private Instant startTime;
     private Instant endTime;
+    private List<Break> breaks;
+    private List<Lunch> lunches;
     /**
      * Referencing the employee like this means a lot of duplicated data in the DB,
      * but makes it easy to query.

@@ -29,6 +29,27 @@ public class TimeClockService {
         this.shiftRepository = shiftRepository;
     }
 
+    public Shift startBreak(String employeeId) {
+        var shiftOptional = findActiveShift(employeeId);
+        if (shiftOptional.isEmpty()) {
+            throw new EmployeeNotClockedInException("Can't start a break for " + employeeId + " when not clocked in.");
+        }
+        var shift = shiftOptional.get();
+        // Check if already on break
+        if (shift.getBreaks() != null && !shift.getBreaks().isEmpty()) {
+            // If 
+            shift.getBreaks().stream().filter(b -> b.getEndTime() != null).findFirst().ifPresent(b -> {
+                throw new EmployeeClockedInException(
+                        "Can't start a break for " + employeeId + " when already on break.");
+            });
+        }
+
+
+        shiftRepository.save(shift);
+
+        return shift;
+    }
+
     /**
      * A query function that queries the repository for an active (endTime == null)
      * shift for the given employee.
