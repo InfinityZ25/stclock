@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import us.jcedeno.stclock.exceptions.types.EmployeeNotClockedInException;
 import us.jcedeno.stclock.exceptions.types.EmployeeNotFoundException;
+import us.jcedeno.stclock.exceptions.types.ShiftsNotFoundException;
 
 /**
  * A global exception handler class. This is probably not the optimal way of
@@ -23,13 +24,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = { IllegalArgumentException.class })
     protected ResponseEntity<Object> handleConflict(
             RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ErrorResponse.builder().code(HttpStatus.CONFLICT.value()).message(ex.getMessage()).build(),
+        return handleExceptionInternal(ex,
+                ErrorResponse.builder().code(HttpStatus.CONFLICT.value()).message(ex.getMessage()).build(),
                 new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
-    @ExceptionHandler(value = { EmployeeNotFoundException.class, EmployeeNotClockedInException.class })
+    @ExceptionHandler(value = { EmployeeNotFoundException.class, EmployeeNotClockedInException.class,
+            ShiftsNotFoundException.class })
     protected ResponseEntity<Object> handleNotFound(RuntimeException ex, WebRequest request) {
-        return handleExceptionInternal(ex, ErrorResponse.builder().code(HttpStatus.NOT_FOUND.value()).message(ex.getMessage()).build(),
+        return handleExceptionInternal(ex,
+                ErrorResponse.builder().code(HttpStatus.NOT_FOUND.value()).message(ex.getMessage()).build(),
                 new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 

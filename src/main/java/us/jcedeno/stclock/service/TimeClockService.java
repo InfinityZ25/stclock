@@ -85,6 +85,11 @@ public class TimeClockService {
         return shiftRepository.save(shift);
     }
 
+    public Shift getShiftById(String shiftId) {
+        return shiftRepository.findById(shiftId)
+                .orElseThrow(() -> new ShiftsNotFoundException("Shift " + shiftId + " not found."));
+    }
+
     public Iterable<Shift> getEmployeeShifts(String id) {
         return shiftRepository.findByEmployeeId(id)
                 .orElseThrow(() -> new ShiftsNotFoundException("No shifts found for employee with id: " + id));
